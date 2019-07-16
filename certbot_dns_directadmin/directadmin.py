@@ -1,7 +1,5 @@
 import base64
 from collections import OrderedDict
-import tldextract
-
 import requests
 
 try:
@@ -19,7 +17,7 @@ class DirectAdminClient:
 
     def __init__(self, url, username, password):
 
-        self.version = "0.0.1"
+        self.version = "0.0.2"
         self.client = requests.session()
         self.headers = {'user-agent': 'pyDirectAdmin/' + str(self.version),
                         'Authorization': 'Basic %s' % base64.b64encode(("%s:%s" %
