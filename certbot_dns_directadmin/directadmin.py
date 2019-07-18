@@ -17,7 +17,7 @@ class DirectAdminClient:
 
     def __init__(self, url, username, password):
 
-        self.version = "0.0.2"
+        self.version = "0.0.5"
         self.client = requests.session()
         self.headers = {'user-agent': 'pyDirectAdmin/' + str(self.version),
                         'Authorization': 'Basic %s' % base64.b64encode(("%s:%s" %
@@ -52,7 +52,7 @@ class DirectAdminClient:
     def __process_response__(response):
         if int(response['error'][0]) > 0:
             # There was an error
-            raise Exception(response['text'][0])
+            raise DirectAdminClientException(response['text'][0])
         elif int(response['error'][0]) == 0:
             # Everything succeeded
             return {'error': response['error'][0],
@@ -80,7 +80,7 @@ class DirectAdminClient:
 
         params = OrderedDict([('domain', domain),
                               ('action', 'add'),
-                              ('type', record_type.lower()),
+                              ('type', record_type.upper()),
                               ('name', record_name),
                               ('value', record_value)])
 
@@ -98,7 +98,7 @@ class DirectAdminClient:
 
         params = OrderedDict([('domain', domain),
                               ('action', 'edit'),
-                              ('type', record_type),
+                              ('type', record_type.upper()),
                               (record_type.lower() + "recs0", 'name={}&value={}'.format(record_name, record_value_old)),
                               ('name', record_name),
                               ('value', record_value_new)])
@@ -140,3 +140,6 @@ class DirectAdminClient:
 
         return self.__process_response__(response)
 
+
+class DirectAdminClientException(Exception):
+    pass
