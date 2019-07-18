@@ -16,7 +16,7 @@ import zope.interface
 from certbot import errors
 from certbot import interfaces
 from certbot.plugins import dns_common
-from certbot_dns_directadmin.directadmin import DirectAdminClient
+from certbot_dns_directadmin.directadmin import DirectAdminClient, DirectAdminClientException
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +34,8 @@ class Authenticator(dns_common.DNSAuthenticator):
         self.credentials = None
 
     @classmethod
-    def add_parser_arguments(cls, add):  # pylint: disable=arguments-differ
-        super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=10)
+    def add_parser_arguments(cls, add, **kwargs):
+        super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=30)
         add("credentials",
             type=str,
             help="The directadmin credentials INI file")
@@ -93,14 +93,13 @@ class _DirectadminClient:
             logger.debug(response)
             if int(response['error']) == 0:
                 logger.info("Successfully added TXT record for %s", record_name)
-        except Exception as e:
+        except DirectAdminClientException as e:
             raise errors.PluginError("Error adding TXT record: %s" % e)
 
-    def del_txt_record(self, record_name, record_content, record_ttl=60):
+    def del_txt_record(self, record_name, record_content):
         """Remove a TXT record
         :param str record_name: the domain name to remove
         :param str record_content: the content of the TXT record to remove
-        :param int record_ttl: the TTL of the record to remove
         """
         (directadmin_zone, directadmin_name) = self._get_zone_and_name(record_name)
 
@@ -109,18 +108,18 @@ class _DirectadminClient:
             logger.debug(response)
             if int(response['error']) == 0:
                 logger.info("Successfully removed TXT record for %s", record_name)
-        except Exception as e:
+        except DirectAdminClientException as e:
             raise errors.PluginError("Error removing TXT record: %s" % e)
 
-    def _get_zone_and_name(self, record_domain):
+    @staticmethod
+    def _get_zone_and_name(record_domain):
         """Find a suitable zone for a domain
         :param str record_name: the domain name
         :returns: (the zone, the name in the zone)
         :rtype: tuple
         """
-        directadmin_zone = ''
-        directadmin_name = ''
 
+        logger.debug('Record Domain: ' + record_domain)
         (subdomain, domain, suffix) = tldextract.extract(record_domain)
         logger.debug('Subdomain: ' + subdomain)
         logger.debug('Domain: ' + domain)
