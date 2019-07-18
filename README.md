@@ -51,7 +51,7 @@ docker run \
 cybercinch/certbot-dns-directadmin \
 certonly \
 --authenticator certbot-dns-directadmin:directadmin \
---certbot-dns-cpanel:cpanel-credentials /tmp/directadmin-credentials.ini \
+--certbot-dns-directadmin:directadmin-credentials /tmp/directadmin-credentials.ini \
 -d example.com \
 -d www.example.com
 ```
