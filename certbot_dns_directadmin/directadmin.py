@@ -2,6 +2,7 @@ import base64
 from collections import OrderedDict
 import requests
 
+# noinspection PyUnresolvedReferences
 try:
     #  python 3
     from urllib.request import urlopen, Request
