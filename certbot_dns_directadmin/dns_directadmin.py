@@ -35,7 +35,7 @@ class Authenticator(dns_common.DNSAuthenticator):
 
     @classmethod
     def add_parser_arguments(cls, add, **kwargs):
-        super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=30)
+        super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=15)
         add("credentials",
             type=str,
             help="The directadmin credentials INI file")
@@ -75,7 +75,7 @@ class _DirectadminClient:
         self.url = url
         self.client = DirectAdminClient(url, username, password)
 
-    def add_txt_record(self, record_name, record_content, record_ttl=60):
+    def add_txt_record(self, record_name, record_content, record_ttl=1):
         """Add a TXT record
         :param str record_name: the domain name to add
         :param str record_content: the content of the TXT record to add
