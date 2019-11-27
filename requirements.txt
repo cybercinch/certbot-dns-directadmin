@@ -30,3 +30,4 @@ zope.interface==4.6.0
 zope.proxy==4.3.2
 requests==2.22.0
 tldextract==2.2.1
+sphinx-rtd-theme
