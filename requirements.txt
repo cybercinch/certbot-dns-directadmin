@@ -16,7 +16,7 @@ pycparser==2.19
 pyOpenSSL==19.0.0
 pyRFC3339==1.1
 pytz==2019.1
-pywin32
+#pywin32
 requests==2.22.0
 requests-toolbelt==0.9.1
 six==1.12.0
