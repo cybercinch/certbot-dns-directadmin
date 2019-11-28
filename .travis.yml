@@ -1,3 +1,10 @@
+language: python
+python:
+  - "3.8"
+# command to run tests
+script:
+  - echo "Pass"
+
 deploy:
   provider: pypi
   user: guisea
