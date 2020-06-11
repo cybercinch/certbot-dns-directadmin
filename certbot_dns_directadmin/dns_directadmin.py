@@ -124,7 +124,17 @@ class _DirectadminClient:
         logger.debug('Domain: ' + domain)
         logger.debug('Suffix: ' + suffix)
 
-        directadmin_zone = ".".join((domain, suffix))
-        directadmin_name = subdomain
+        
+        
+        # Check if subdomain has a period
+        if "." in subdomain:
+            # This is second-level subdomain
+            ml = subdomain.split('.')
+            directadmin_zone = "."join(ml.pop(), domain, suffix)
+            directadmin_name = ml[0]
+        else
+            # Single Level subdomain ;)
+            directadmin_name = subdomain
+            directadmin_zone = ".".join((domain, suffix))
 
         return directadmin_zone, directadmin_name
