@@ -18,7 +18,7 @@ class DirectAdminClient:
 
     def __init__(self, url, username, password):
 
-        self.version = "0.0.5"
+        self.version = "0.0.6"
         self.client = requests.session()
         self.headers = {'user-agent': 'pyDirectAdmin/' + str(self.version),
                         'Authorization': 'Basic %s' % base64.b64encode(("%s:%s" %
@@ -67,8 +67,9 @@ class DirectAdminClient:
                            keep_blank_values=0,
                            strict_parsing=1)
         response = list()
-        for domain in domains.values():
-            response.append(domain[0])
+        for key, item in domains.items():
+            # Extract domain list
+            response = item
         return response
 
     def get_zone_list(self, domain):

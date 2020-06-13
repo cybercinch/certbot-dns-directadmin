@@ -80,7 +80,7 @@ class _DirectadminClient:
         :param str record_content: the content of the TXT record to add
         :param int record_ttl: the TTL of the record to add
         """
-        (directadmin_zone, directadmin_name) = _get_zone_and_name(record_name)
+        (directadmin_zone, directadmin_name) = self._get_zone_and_name(record_name)
 
         try:
             response = self.client.add_dns_record(directadmin_zone,
@@ -100,7 +100,7 @@ class _DirectadminClient:
         :param str record_name: the domain name to remove
         :param str record_content: the content of the TXT record to remove
         """
-        (directadmin_zone, directadmin_name) = _get_zone_and_name(record_name)
+        (directadmin_zone, directadmin_name) = self._get_zone_and_name(record_name)
 
         try:
             response = self.client.delete_dns_record(directadmin_zone, 'txt', directadmin_name, record_content)
@@ -110,29 +110,27 @@ class _DirectadminClient:
         except DirectAdminClientException as e:
             raise errors.PluginError("Error removing TXT record: %s" % e)
 
+    def _get_zone_and_name(self, record_domain):
+        """Find a suitable zone for a domain
+        :param str record_name: the domain name
+        :returns: (the zone, the name in the zone)
+        :rtype: tuple
+        """
 
-def _get_zone_and_name(record_domain):
-    """Find a suitable zone for a domain
-    :param str record_name: the domain name
-    :returns: (the zone, the name in the zone)
-    :rtype: tuple
-    """
+        (subdomain, domain, suffix) = tldextract.extract(record_domain)
 
-    logger.debug('Record Domain: ' + record_domain)
-    (subdomain, domain, suffix) = tldextract.extract(record_domain)
-    logger.debug('Subdomain: ' + subdomain)
-    logger.debug('Domain: ' + domain)
-    logger.debug('Suffix: ' + suffix)
+        for zone in self.client.get_domain_list():
+            if record_domain is zone or record_domain.endswith('.' + zone):
+                directadmin_zone = zone
+                directadmin_name = record_domain[:-len(zone) - 1]
+                break
 
-    # Check if subdomain has a period
-    if "." in subdomain:
-        # This is second-level subdomain
-        ml = subdomain.split('.')
-        directadmin_zone = ".".join((ml.pop(), domain, suffix))
-        directadmin_name = ml[0]
-    else:
-        # Single Level subdomain ;)
-        directadmin_name = subdomain
-        directadmin_zone = ".".join((domain, suffix))
+        logger.debug('Record Domain: ' + record_domain)
+        logger.debug('Subdomain: ' + directadmin_name)
+        logger.debug('Domain: ' + directadmin_zone)
+        logger.debug('Suffix: ' + suffix)
+        if not directadmin_zone:
+            raise errors.PluginError(
+                "Could not get the zone for %s. Is this name in a zone managed in directadmin?" % record_domain)
 
-    return directadmin_zone, directadmin_name
+        return directadmin_zone, directadmin_name
