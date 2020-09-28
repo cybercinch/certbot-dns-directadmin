@@ -118,18 +118,12 @@ class _DirectadminClient:
         """
 
         (subdomain, domain, suffix) = tldextract.extract(record_domain)
-
-        domain_list = self.client.get_domain_list()
         
-        if record_domain in domain_list:
-            directadmin_zone = record_domain
-            directadmin_name = record_domain[:-len(zone) - 1]
-        else:
-            for zone in self.client.get_domain_list().sort(reverse=True) :
+            for zone in self.client.get_domain_list():
                 if record_domain is zone or record_domain.endswith('.' + zone):
                     directadmin_zone = zone
                     directadmin_name = record_domain[:-len(zone) - 1]
-                break
+                    break
 
         logger.debug('Record Domain: ' + record_domain)
         logger.debug('Subdomain: ' + directadmin_name)
