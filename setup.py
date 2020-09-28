@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.18'
+version = '0.0.19'
 
 with open('README.md') as f:
     readme = f.read()
