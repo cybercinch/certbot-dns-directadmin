@@ -7,12 +7,12 @@ subsequently removing, TXT records using the DirectAdmin API.
 Named Arguments
 ---------------
 
-===============================================================   ==========================================
-``--certbot-dns-directadmin:directadmin-credentials``             DirectAdmin Credentials file. (Required)
-``--certbot-dns-directadmin:directadmin-propagation-seconds``     The number of seconds to wait for DNS to
-                                                                  propagate before asking the ACME server
-                                                                  to verify the DNS record. (Default: 60)
-===============================================================   ==========================================
+=========================================================================================================
+``--directadmin-credentials``             DirectAdmin Credentials file. (Required)
+``--directadmin-propagation-seconds``     The number of seconds to wait for DNS to
+                                          propagate before asking the ACME server
+                                          to verify the DNS record. (Default: 60)
+=========================================================================================================
 
 
 Credentials
@@ -39,16 +39,16 @@ DirectAdmin provides instructions for creating a login key - `here <https://help
 
    # The DirectAdmin Server url
    # include the scheme and the port number (Normally 2222)
-   certbot_dns_directadmin:directadmin_url = https://my.directadminserver.com:2222
+   directadmin_url = https://my.directadminserver.com:2222
    
    # The DirectAdmin username
-   certbot_dns_directadmin:directadmin_username = username
+   directadmin_username = username
    
    # The DirectAdmin password
-   certbot_dns_directadmin:directadmin_password = aSuperStrongPassword
+   directadmin_password = aSuperStrongPassword
 
 The path to this file can be provided interactively or using the
-``--certbot-dns-directadmin:directadmin-credentials`` command-line argument. Certbot records the path
+``--directadmin-credentials`` command-line argument. Certbot records the path
 to this file for use during renewal, but does not store the file's contents.
 
 .. caution::
@@ -74,8 +74,8 @@ Examples
    :caption: To acquire a certificate for ``example.com``
 
    certbot certonly \\
-     --authenticator certbot-dns-directadmin:directadmin \\
-     --certbot-dns-directadmin:directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
+     --authenticator directadmin \\
+     --directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
      -d example.com
 
 .. code-block:: bash
@@ -83,8 +83,8 @@ Examples
              ``www.example.com``
 
    certbot certonly \\
-     --authenticator certbot-dns-directadmin:directadmin \\
-     --certbot-dns-directadmin:directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
+     --authenticator directadmin \\
+     --directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
      -d example.com \\
      -d www.example.com
 
@@ -93,9 +93,9 @@ Examples
              for DNS propagation
 
    certbot certonly \\
-     --authenticator certbot-dns-directadmin:directadmin \\
-     --certbot-dns-directadmin:directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
-     --certbot-dns-directadmin:directadmin-propagation-seconds 120 \\
+     --authenticator directadmin \\
+     --directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
+     --directadmin-propagation-seconds 120 \\
      -d example.com
 
 """
