@@ -33,7 +33,7 @@ setup(
     ],
     keywords='certbot letsencrypt directadmin da dns-01 plugin',
     install_requires=[
-        'certbot',
+        'certbot>=1.7.0,<1.8.0',
         'zope.interface',
         'tldextract'
     ],
