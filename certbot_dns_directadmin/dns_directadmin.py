@@ -1,5 +1,4 @@
 import logging
-import tldextract
 
 try:
     #  python 3
