@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.20'
+version = '0.0.21'
 
 with open('README.md') as f:
     readme = f.read()
@@ -33,7 +33,7 @@ setup(
     ],
     keywords='certbot letsencrypt directadmin da dns-01 plugin',
     install_requires=[
-        'certbot>=1.7.0,<1.8.0',
+        'certbot>=1.8.0',
         'zope.interface',
         'tldextract'
     ],

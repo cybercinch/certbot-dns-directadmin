@@ -66,7 +66,7 @@ class Authenticator(dns_common.DNSAuthenticator):
             self.credentials.conf('password')
         )
 
-        
+
 class _DirectadminClient:
     """Encapsulate communications with the directadmin API"""
 
@@ -116,8 +116,6 @@ class _DirectadminClient:
         :returns: (the zone, the name in the zone)
         :rtype: tuple
         """
-
-        (subdomain, domain, suffix) = tldextract.extract(record_domain)
 
         for zone in self.client.get_domain_list():
             if record_domain is zone or record_domain.endswith('.' + zone):
