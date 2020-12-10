@@ -7,3 +7,4 @@ Plugin to allow acme dns-01 authentication of a name managed in DirectAdmin. Use
 ## Documentation
 
 You may find the module documentation on [Read The Docs](https://certbot-dns-directadmin.readthedocs.io/en/latest/ "certbot-dns-directadmin's Documentation")
+
