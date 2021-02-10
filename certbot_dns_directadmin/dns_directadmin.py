@@ -125,7 +125,6 @@ class _DirectadminClient:
         logger.debug('Record Domain: ' + record_domain)
         logger.debug('Subdomain: ' + directadmin_name)
         logger.debug('Domain: ' + directadmin_zone)
-        logger.debug('Suffix: ' + suffix)
         if not directadmin_zone:
             raise errors.PluginError(
                 "Could not get the zone for %s. Is this name in a zone managed in directadmin?" % record_domain)
