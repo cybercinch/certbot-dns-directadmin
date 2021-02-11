@@ -35,7 +35,6 @@ setup(
     install_requires=[
         'certbot>=1.8.0',
         'zope.interface',
-        'tldextract'
     ],
     entry_points={
         'certbot.plugins': [
