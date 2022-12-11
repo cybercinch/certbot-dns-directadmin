@@ -9,7 +9,7 @@ steps:
 
   - name: Verify Changed files
     uses: tj-actions/verify-changed-files@v12
-      id: changed_files
+    id: changed_files
     with:
       files: coverage.svg
 
