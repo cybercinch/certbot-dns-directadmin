@@ -10,6 +10,7 @@ jobs:
           fetch-depth: 0
       - name: Run Coverage
         run: |
+          pip install -U coverage
           python -m coverage run -m unittest tests/test_dns_directadmin.py
       - name: Coverage Badge
         uses: tj-actions/coverage-badge-py@v1.8
