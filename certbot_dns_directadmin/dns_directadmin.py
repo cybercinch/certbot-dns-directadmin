@@ -1,55 +1,67 @@
+"""DNS Authenticator for DirectAdmin."""
 import logging
-
-try:
-    #  python 3
-    from urllib.request import urlopen, Request
-    from urllib.parse import urlencode
-except ImportError:
-    #  python 2
-    from urllib import urlencode
-    from urllib2 import urlopen, Request
-
-import zope.interface
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Optional
 
 from certbot import errors
-from certbot import interfaces
 from certbot.plugins import dns_common
+from certbot.plugins.dns_common import CredentialsConfiguration
+
 from certbot_dns_directadmin.directadmin import DirectAdminClient, DirectAdminClientException
 
 logger = logging.getLogger(__name__)
 
 
-@zope.interface.implementer(interfaces.IAuthenticator)
-@zope.interface.provider(interfaces.IPluginFactory)
 class Authenticator(dns_common.DNSAuthenticator):
-    """directadmin dns-01 authenticator plugin"""
+    """DNS Authenticator for DirectAdmin
+    This Authenticator uses the DirectAdmin API to fulfill a dns-01 challenge.
+    """
 
-    description = "Obtain a certificate using a DNS TXT record in directadmin"
-    problem = "a"
+    description = ('Obtain certificates using a DNS TXT record (if you are using a DirectAdmin server for '
+                   'DNS).')
+    ttl = 120
 
     def __init__(self, *args, **kwargs):
         super(Authenticator, self).__init__(*args, **kwargs)
-        self.credentials = None
+        self.credentials: Optional[CredentialsConfiguration] = None
 
     @classmethod
-    def add_parser_arguments(cls, add, **kwargs):
-        super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=60)
-        add("credentials",
-            type=str,
-            help="The directadmin credentials INI file")
+    def add_parser_arguments(cls, add, **kwargs) -> None:
+        super(Authenticator, cls).add_parser_arguments(add,
+                                                       default_propagation_seconds=60)
+        add("credentials", type=str, help="The DirectAdmin credentials INI file")
+
+    @staticmethod
+    def _validate_credentials(credentials: CredentialsConfiguration) -> None:
+        url = credentials.conf('url')
+        username = credentials.conf('username')
+        password = credentials.conf('password')
+        token = credentials.conf('token')
+
+        if not url:
+            raise errors.PluginError('{}: dns_directadmin_url is required')
+        else:
+            if not username and (not token or not password):
+                raise errors.PluginError('{}: dns_directadmin_username (Username) and  '
+                                         'dns_directadmin_password (Password) or dns_directadmin_token (Access Token) '
+                                         'are required')
+            if username and (not token and not password):
+                raise errors.PluginError('{}: dns_directadmin_password (Password) '
+                                         'or dns_directadmin_token (Access Token) '
+                                         'are required')
 
     def more_info(self):  # pylint: disable=missing-docstring
         return self.description
 
-    def _setup_credentials(self):
+    def _setup_credentials(self) -> None:
         self.credentials = self._configure_credentials(
             'credentials',
-            'The directadmin credentials INI file',
-            {
-                'url': 'directadmin url',
-                'username': 'directadmin username',
-                'password': 'directadmin password'
-            }
+            'DirectAdmin credentials INI file',
+            None,
+            self._validate_credentials
         )
 
     def _perform(self, domain, validation_domain_name, validation):
@@ -58,19 +70,24 @@ class Authenticator(dns_common.DNSAuthenticator):
     def _cleanup(self, domain, validation_domain_name, validation):
         self._get_directadmin_client().del_txt_record(validation_domain_name, validation)
 
-    def _get_directadmin_client(self):
-        return _DirectadminClient(
-            self.credentials.conf('url'),
-            self.credentials.conf('username'),
-            self.credentials.conf('password')
-        )
+    def _get_directadmin_client(self) -> "_DirectadminClient":
+        if not self.credentials:  # pragma: no cover
+            raise errors.Error("Plugin has not been prepared.")
+        if self.credentials.conf('url'):  # pragma: no cover
+            if self.credentials.conf('password') and not self.credentials.conf('token'):
+                return _DirectadminClient(self.credentials.conf('url'),
+                                          self.credentials.conf('username'),
+                                          self.credentials.conf('password'))
+            elif not self.credentials.conf('password') and self.credentials.conf('token'):
+                return _DirectadminClient(self.credentials.conf('url'),
+                                          self.credentials.conf('username'),
+                                          self.credentials.conf('token'))
 
 
 class _DirectadminClient:
     """Encapsulate communications with the directadmin API"""
-
-    def __init__(self, url, username, password):
-        self.url = url
+    def __init__(self, url, username,
+                 password) -> None:
         self.client = DirectAdminClient(url, username, password)
 
     def add_txt_record(self, record_name, record_content, record_ttl=1):
@@ -79,7 +96,10 @@ class _DirectadminClient:
         :param str record_content: the content of the TXT record to add
         :param int record_ttl: the TTL of the record to add
         """
-        (directadmin_zone, directadmin_name) = self._get_zone_and_name(record_name)
+        try:
+            (directadmin_zone, directadmin_name) = self._get_zone_and_name(record_name)
+        except DirectAdminClientException as e:
+            raise errors.PluginError("Error adding TXT record: %s" % e)
 
         try:
             response = self.client.add_dns_record(directadmin_zone,
@@ -109,24 +129,31 @@ class _DirectadminClient:
         except DirectAdminClientException as e:
             raise errors.PluginError("Error removing TXT record: %s" % e)
 
-    def _get_zone_and_name(self, record_domain):
+    def _get_zone_and_name(self, record_name):
         """Find a suitable zone for a domain
         :param str record_name: the domain name
         :returns: (the zone, the name in the zone)
         :rtype: tuple
         """
-
-        for zone in self.client.get_domain_list():
-            if record_domain is zone or record_domain.endswith('.' + zone):
+        directadmin_name = None
+        domains = None
+        domains = self.client.get_domain_list()
+        for zone in domains:
+            if record_name is zone or record_name.endswith('.' + zone):
                 directadmin_zone = zone
-                directadmin_name = record_domain[:-len(zone) - 1]
+                directadmin_name = record_name[:-len(zone) - 1]
                 break
+        if directadmin_name is None:
+            raise DirectAdminClientException(
+                "Unable to determine DNS Zone from DirectAdmin. \n"
+                "Domains: {}\nRecord Name: {}".format(domains,
+                                                      record_name)
+            )
 
-        logger.debug('Record Domain: ' + record_domain)
+        if not directadmin_zone:
+            raise DirectAdminClientException(
+                "Could not get the zone for {}. Is this name in a zone managed in directadmin?".format(record_name))
+        logger.debug('Record Domain: ' + record_name)
         logger.debug('Subdomain: ' + directadmin_name)
         logger.debug('Domain: ' + directadmin_zone)
-        if not directadmin_zone:
-            raise errors.PluginError(
-                "Could not get the zone for %s. Is this name in a zone managed in directadmin?" % record_domain)
-
         return directadmin_zone, directadmin_name

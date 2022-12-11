@@ -50,7 +50,7 @@ class DirectAdminClient:
         return response
 
     @staticmethod
-    def __process_response__(response):
+    def _process_response(response):
         if int(response['error'][0]) > 0:
             # There was an error
             raise DirectAdminClientException(response['text'][0])
@@ -94,7 +94,7 @@ class DirectAdminClient:
                             keep_blank_values=0,
                             strict_parsing=1)
 
-        return self.__process_response__(response)
+        return self._process_response(response)
 
     def update_dns_record(self, domain, record_type, record_name, record_value_old, record_value_new, record_ttl=None):
 
@@ -113,7 +113,7 @@ class DirectAdminClient:
                             keep_blank_values=0,
                             strict_parsing=1)
 
-        return self.__process_response__(response)
+        return self._process_response(response)
 
     def delete_dns_record(self, domain, record_type, record_name, record_value):
         params = OrderedDict([('domain', domain),
@@ -126,7 +126,7 @@ class DirectAdminClient:
                             keep_blank_values=0,
                             strict_parsing=1)
 
-        return self.__process_response__(response)
+        return self._process_response(response)
 
     def override_domain_ttl(self, domain, record_name, ttl):
         params = OrderedDict([('domain', domain),
@@ -140,7 +140,7 @@ class DirectAdminClient:
                             keep_blank_values=0,
                             strict_parsing=1)
 
-        return self.__process_response__(response)
+        return self._process_response(response)
 
 
 class DirectAdminClientException(Exception):
