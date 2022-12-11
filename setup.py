@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '1.0.2'
+version = '1.0.3'
 
 with open('README.md') as f:
     readme = f.read()
@@ -37,7 +37,7 @@ setup(
     ],
     entry_points={
         'certbot.plugins': [
-            'directadmin = certbot_dns_directadmin.dns_directadmin:Authenticator',
+            'dns-directadmin = certbot_dns_directadmin.dns_directadmin:Authenticator',
         ],
     },
 )
