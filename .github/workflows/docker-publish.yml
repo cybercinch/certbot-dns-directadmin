@@ -30,6 +30,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags:
-            - cybercinch/certbot-dns-directadmin:latest
-            - cybercinch/certbot-dns-directadmin:${{ steps.vars.outputs.tag }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/certbot-dns-directadmin:latest, ${{ secrets.DOCKERHUB_USERNAME }}/certbot-dns-directadmin:${{ steps.vars.outputs.tag }}
