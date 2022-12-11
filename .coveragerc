@@ -1,5 +1,5 @@
 [run]
-branch = True
+branch = False
 omit =
     docs/*
     certbot_dns_directadmin/directadmin.py
