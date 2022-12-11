@@ -12,7 +12,7 @@ jobs:
       - name: Run Unittest with Coverage
         run: |
           pip install -U -r requirements.txt
-          python -m coverage run -m unittest discover -s ./tests
+          python -m coverage --rcfile=.coveragerc run -m unittest discover -s ./tests
 
       - name: Coverage Badge
         uses: tj-actions/coverage-badge-py@v1.8
