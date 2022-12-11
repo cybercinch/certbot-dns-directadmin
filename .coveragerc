@@ -4,6 +4,6 @@ omit =
     docs/*
     certbot_dns_directadmin/directadmin.py
     */site-packages/*
-    */distutils/*
+    */dist-packages/*
 [coverage:report]
 skip_empty = true
