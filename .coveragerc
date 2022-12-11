@@ -3,5 +3,7 @@ branch = False
 omit =
     docs/*
     certbot_dns_directadmin/directadmin.py
+    */site-packages/*
+    */distutils/*
 [coverage:report]
 skip_empty = true
