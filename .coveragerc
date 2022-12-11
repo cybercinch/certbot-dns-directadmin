@@ -2,6 +2,7 @@
 branch = False
 omit =
     docs/*
+    tests/*
     certbot_dns_directadmin/directadmin.py
     */site-packages/*
     */dist-packages/*
