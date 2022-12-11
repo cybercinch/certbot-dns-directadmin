@@ -1,6 +1,8 @@
 name: generate coverage in repo
 on:
   push:
+    tags-ignore:
+      - '*'
 jobs:
   test_and_cover:
     runs-on: ubuntu-latest
