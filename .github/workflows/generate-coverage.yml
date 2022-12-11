@@ -1,4 +1,7 @@
 name: generate coverage in repo
+on:
+  push:
+
 steps:
   - uses: actions/checkout@v2
     with:
