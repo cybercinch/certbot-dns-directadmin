@@ -1,5 +1,5 @@
 """
-The `~certbot-dns-directadmin:directadmin` plugin automates the process of
+The `~certbot-dns-directadmin` plugin automates the process of
 completing a ``dns-01`` challenge (`~acme.challenges.DNS01`) by creating, and
 subsequently removing, TXT records using the DirectAdmin API.
 
