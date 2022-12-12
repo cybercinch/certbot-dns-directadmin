@@ -101,16 +101,16 @@ Examples
      --directadmin-propagation-seconds 120 \\
      -d example.com
 
-.. code-block:: console
+.. code-block:: bash
    :caption: To acquire a certificate for ``example.com``, waiting 120 seconds
              for DNS propagation using docker image
 
-   sudo docker run -it --rm --name certbot \
-        -v "${PWD}/letsencrypt/etc:/etc/letsencrypt" \
-        cybercinch/certbot-dns-directadmin certonly --agree-tos \
-        --authenticator directadmin \
-        --directadmin-credentials=/etc/letsencrypt/credentials.ini \
-        --register-unsafely-without-email \
+   sudo docker run -it --rm --name certbot \\
+        -v "${PWD}/letsencrypt/etc:/etc/letsencrypt" \\
+        cybercinch/certbot-dns-directadmin certonly --agree-tos \\
+        --authenticator directadmin \\
+        --directadmin-credentials=/etc/letsencrypt/credentials.ini \\
+        --register-unsafely-without-email \\
         -d example.com
 
 """
