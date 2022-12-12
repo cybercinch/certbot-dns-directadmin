@@ -102,7 +102,7 @@ Examples
      -d example.com
 
 .. code-block:: bash
-   :caption: To acquire a certificate for ``example.com``, waiting 120 seconds
+   :caption: To acquire a certificate for ``example.com``, waiting default 60 seconds
              for DNS propagation using docker image
 
    sudo docker run -it --rm --name certbot \\
