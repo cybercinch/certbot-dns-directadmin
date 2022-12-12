@@ -106,10 +106,10 @@ Examples
              for DNS propagation using docker image
 
    sudo docker run -it --rm --name certbot \
-            -v "${PWD}/letsencrypt/etc:/etc/letsencrypt" \
-            cybercinch/certbot-dns-directadmin certonly --agree-tos \
-            --authenticator directadmin -v \
-            --directadmin-credentials=/etc/letsencrypt/credentials.ini \
-            --register-unsafely-without-email \
-            -d example.com
+   -v "${PWD}/letsencrypt/etc:/etc/letsencrypt" \
+   cybercinch/certbot-dns-directadmin certonly --agree-tos \
+   --authenticator directadmin -v \
+   --directadmin-credentials=/etc/letsencrypt/credentials.ini \
+   --register-unsafely-without-email \
+   -d example.com
 """
