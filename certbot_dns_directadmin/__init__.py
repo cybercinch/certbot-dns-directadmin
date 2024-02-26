@@ -8,9 +8,9 @@ Named Arguments
 ---------------
 
 ========================================  =====================================
-``--directadmin-credentials``             DirectAdmin Credentials file.
+``--dns-directadmin-credentials``             DirectAdmin Credentials file.
                                           (Required)
-``--directadmin-propagation-seconds``     The number of seconds to wait for DNS
+``--dns-directadmin-propagation-seconds``     The number of seconds to wait for DNS
                                           to propagate before asking the ACME
                                           server to verify the DNS record.
                                           (Default: 60)
@@ -42,16 +42,16 @@ DirectAdmin provides instructions for creating a login key - `here <https://help
 
    # The DirectAdmin Server url
    # include the scheme and the port number (Normally 2222)
-   directadmin_url = https://my.directadminserver.com:2222
+   dns_directadmin_url = https://my.directadminserver.com:2222
    
    # The DirectAdmin username
-   directadmin_username = username
+   dns_directadmin_username = username
    
    # The DirectAdmin password
-   directadmin_password = aSuperStrongPassword
+   dns_directadmin_password = aSuperStrongPasswordorLoginKey
 
 The path to this file can be provided interactively or using the
-``--directadmin-credentials`` command-line argument. Certbot records the path
+``--dns-directadmin-credentials`` command-line argument. Certbot records the path
 to this file for use during renewal, but does not store the file's contents.
 
 .. caution::
@@ -77,8 +77,8 @@ Examples
    :caption: To acquire a certificate for ``example.com``
 
    certbot certonly \\
-     --authenticator directadmin \\
-     --directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
+     --authenticator dns-directadmin \\
+     --dns-directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
      -d example.com
 
 .. code-block:: bash
@@ -86,8 +86,8 @@ Examples
              ``www.example.com``
 
    certbot certonly \\
-     --authenticator directadmin \\
-     --directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
+     --authenticator dns-directadmin \\
+     --dns-directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
      -d example.com \\
      -d www.example.com
 
@@ -96,9 +96,9 @@ Examples
              for DNS propagation
 
    certbot certonly \\
-     --authenticator directadmin \\
-     --directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
-     --directadmin-propagation-seconds 120 \\
+     --authenticator dns-directadmin \\
+     --dns-directadmin-credentials ~/.secrets/certbot/directadmin.ini \\
+     --dns-directadmin-propagation-seconds 120 \\
      -d example.com
 
 .. code-block:: bash
@@ -108,8 +108,8 @@ Examples
    sudo docker run -it --rm --name certbot \\
         -v "${PWD}/letsencrypt/etc:/etc/letsencrypt" \\
         cybercinch/certbot-dns-directadmin certonly --agree-tos \\
-        --authenticator directadmin \\
-        --directadmin-credentials=/etc/letsencrypt/credentials.ini \\
+        --authenticator dns-directadmin \\
+        --dns-directadmin-credentials=/etc/letsencrypt/credentials.ini \\
         --register-unsafely-without-email \\
         -d example.com
 
