@@ -1,5 +1,6 @@
 """DNS Authenticator for DirectAdmin."""
 import logging
+import json
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -90,7 +91,7 @@ class _DirectadminClient:
                  password) -> None:
         self.client = DirectAdminClient(url, username, password)
 
-    def add_txt_record(self, record_name, record_content, record_ttl=1):
+    def add_txt_record(self, record_name, record_content, record_ttl=1, ):
         """Add a TXT record
         :param str record_name: the domain name to add
         :param str record_content: the content of the TXT record to add
@@ -106,7 +107,8 @@ class _DirectadminClient:
                                                   'txt',
                                                   directadmin_name,
                                                   record_value=record_content,
-                                                  record_ttl=record_ttl)
+                                                  record_ttl=record_ttl
+                                                  )
 
             logger.debug(response)
             if int(response['error']) == 0:
@@ -138,10 +140,11 @@ class _DirectadminClient:
         directadmin_name = None
         domains = None
         domains = self.client.get_domain_list()
-        for zone in domains:
-            if record_name is zone or record_name.endswith('.' + zone):
-                directadmin_zone = zone
-                directadmin_name = record_name[:-len(zone) - 1]
+        logger.debug('Domain List returned: ' + json.dumps(domains))
+        for domain, main_domain in domains:
+            if record_name is domain or record_name.endswith('.' + domain):
+                directadmin_zone = main_domain
+                directadmin_name = record_name[:-len(domain) - 1]
                 break
         if directadmin_name is None:
             raise DirectAdminClientException(

@@ -70,7 +70,23 @@ class DirectAdminClient:
         for key, item in domains.items():
             # Extract domain list
             response = item
-        return response
+            # For each domain collect pointers
+            pointer_list = dict()
+            for domain in response:
+                domain_list = dict()
+                domain_list.update({domain: domain})
+                r = self.make_request('CMD_API_DOMAIN_POINTER', OrderedDict([('domain', domain)]))
+                try:
+                    pointers = parse_qs(r.read().decode('utf8'),
+                                keep_blank_values=0,
+                                strict_parsing=1)
+                    for key in pointers.keys():
+                        domain_list.update({key: domain})
+                except ValueError:
+                    # Probably a domain no pointers
+                    pass
+        return domain_list
+
 
     def get_zone_list(self, domain):
         params = OrderedDict([('domain', domain)])
@@ -88,6 +104,8 @@ class DirectAdminClient:
 
         if record_ttl is not None:
             params.update({'ttl': record_ttl})
+        
+        params.update({'affect_pointers': 1})
 
         response = self.make_request('CMD_API_DNS_CONTROL', data=params)
         response = parse_qs(response.read().decode('utf8'),
