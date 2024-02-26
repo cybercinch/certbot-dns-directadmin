@@ -101,29 +101,30 @@ class DirectadminClientTest(unittest.TestCase):
         self.directadmin_client = _DirectadminClient(API_URL, API_USERNAME, API_PASSWORD)
 
         self.client = mock.MagicMock()
-        self.client.get_domain_list.return_value = list()
-        self.client.get_domain_list.return_value.append('example.com')
+        self.client.get_domain_list.return_value = dict()
+        self.client.get_domain_list.return_value.update({'example.com': 'example.com'})
         self.directadmin_client.client = self.client
 
     def tearDown(self):
         self.client.get_domain_list.return_value = None
 
     def test_add_txt_record(self):
-        self.client._get_zone_and_name.return_value = (self.record_name, self.domain_name)
+        self.client._get_zone_and_name.return_value = (self.record_name, self.domain_name, 'no')
         self.directadmin_client.client.add_dns_record.return_value = {'error': 0}
         self.directadmin_client.add_txt_record(".".join([self.record_name,
-                                                        DOMAIN]),
+                                                         DOMAIN]),
                                                self.record_content,
                                                self.record_ttl)
         self.client.add_dns_record.assert_called_with(self.domain_name,
                                                       'txt',
                                                       self.record_name,
                                                       record_value=self.record_content,
-                                                      record_ttl=self.record_ttl)
+                                                      record_ttl=self.record_ttl,
+                                                      affect_pointers='no')
 
     def test_add_txt_record_unable_to_find_zone(self):
-        self.client.get_domain_list.return_value = list()
-        self.client.get_domain_list.return_value.append('notexample.com')
+        self.client.get_domain_list.return_value = dict()
+        self.client.get_domain_list.return_value.update({'notexample.com': 'notexample.com'})
 
         self.assertRaises(
             errors.PluginError, lambda: self.directadmin_client.add_txt_record(
@@ -131,106 +132,106 @@ class DirectadminClientTest(unittest.TestCase):
                           self.domain_name]), self.record_content, self.record_ttl))
 
     def test_del_txt_record(self):
-        self.client.get_domain_list.return_value = list()
-        self.client.get_domain_list.return_value.append('example.com')
+        self.client.get_domain_list.return_value = dict()
+        self.client.get_domain_list.return_value.update({'example.com': 'example.com'})
         self.directadmin_client.client.delete_dns_record.return_value = {'error': 0}
         self.directadmin_client.del_txt_record(".".join([self.record_name,
                                                          self.domain_name]),
-                                                         self.record_content)
+                                               self.record_content)
 
 
 # Not Called
-        # self.client.add_dns_record.assert_called_with(self.domain_name,
-        #                                               'txt',
-        #                                               self.record_name,
-        #                                               record_value=self.record_content,
-        #                                               record_ttl=self.record_ttl)
+# self.client.add_dns_record.assert_called_with(self.domain_name,
+#                                               'txt',
+#                                               self.record_name,
+#                                               record_value=self.record_content,
+#                                               record_ttl=self.record_ttl)
 
-    # def test_add_txt_record_error_during_zone_lookup(self):
-    #     self.cf.zones.get.side_effect = API_ERROR
-    #
-    #     self.assertRaises(
-    #         errors.PluginError,
-    #         self.cloudflare_client.add_txt_record,
-    #         DOMAIN, self.record_name, self.record_content, self.record_ttl)
-    #
-    # def test_add_txt_record_zone_not_found(self):
-    #     self.cf.zones.get.return_value = []
-    #
-    #     self.assertRaises(
-    #         errors.PluginError,
-    #         self.cloudflare_client.add_txt_record,
-    #         DOMAIN, self.record_name, self.record_content, self.record_ttl)
-    #
-    # def test_add_txt_record_bad_creds(self):
-    #     self.client.get_domain_list.side_effect = DirectAdminClientException('Bad Credentials!')
-    #     self.assertRaises(
-    #         errors.PluginError,
-    #         self.directadmin_client.add_txt_record,
-    #         self.record_name + '.' + DOMAIN, self.record_content, self.record_ttl)
-    #
-    # def test_del_txt_record(self):
-    #     self.cf.zones.get.return_value = [{'id': self.zone_id}]
-    #     self.cf.zones.dns_records.get.return_value = [{'id': self.record_id}]
-    #
-    #     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
-    #
-    #     expected = [mock.call.zones.get(params=mock.ANY),
-    #                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY),
-    #                 mock.call.zones.dns_records.delete(self.zone_id, self.record_id)]
-    #
-    #     self.assertEqual(expected, self.cf.mock_calls)
-    #
-    #     get_data = self.cf.zones.dns_records.get.call_args[1]['params']
-    #
-    #     self.assertEqual('TXT', get_data['type'])
-    #     self.assertEqual(self.record_name, get_data['name'])
-    #     self.assertEqual(self.record_content, get_data['content'])
-    #
-    # def test_del_txt_record_error_during_zone_lookup(self):
-    #     self.cf.zones.get.side_effect = API_ERROR
-    #
-    #     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
-    #
-    # def test_del_txt_record_error_during_delete(self):
-    #     self.cf.zones.get.return_value = [{'id': self.zone_id}]
-    #     self.cf.zones.dns_records.get.return_value = [{'id': self.record_id}]
-    #     self.cf.zones.dns_records.delete.side_effect = API_ERROR
-    #
-    #     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
-    #     expected = [mock.call.zones.get(params=mock.ANY),
-    #                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY),
-    #                 mock.call.zones.dns_records.delete(self.zone_id, self.record_id)]
-    #
-    #     self.assertEqual(expected, self.cf.mock_calls)
-    #
-    # def test_del_txt_record_error_during_get(self):
-    #     self.cf.zones.get.return_value = [{'id': self.zone_id}]
-    #     self.cf.zones.dns_records.get.side_effect = API_ERROR
-    #
-    #     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
-    #     expected = [mock.call.zones.get(params=mock.ANY),
-    #                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY)]
-    #
-    #     self.assertEqual(expected, self.cf.mock_calls)
-    #
-    # def test_del_txt_record_no_record(self):
-    #     self.cf.zones.get.return_value = [{'id': self.zone_id}]
-    #     self.cf.zones.dns_records.get.return_value = []
-    #
-    #     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
-    #     expected = [mock.call.zones.get(params=mock.ANY),
-    #                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY)]
-    #
-    #     self.assertEqual(expected, self.cf.mock_calls)
-    #
-    # def test_del_txt_record_no_zone(self):
-    #     self.cf.zones.get.return_value = [{'id': None}]
-    #
-    #     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
-    #     expected = [mock.call.zones.get(params=mock.ANY)]
-    #
-    #     self.assertEqual(expected, self.cf.mock_calls)
+# def test_add_txt_record_error_during_zone_lookup(self):
+#     self.cf.zones.get.side_effect = API_ERROR
+#
+#     self.assertRaises(
+#         errors.PluginError,
+#         self.cloudflare_client.add_txt_record,
+#         DOMAIN, self.record_name, self.record_content, self.record_ttl)
+#
+# def test_add_txt_record_zone_not_found(self):
+#     self.cf.zones.get.return_value = []
+#
+#     self.assertRaises(
+#         errors.PluginError,
+#         self.cloudflare_client.add_txt_record,
+#         DOMAIN, self.record_name, self.record_content, self.record_ttl)
+#
+# def test_add_txt_record_bad_creds(self):
+#     self.client.get_domain_list.side_effect = DirectAdminClientException('Bad Credentials!')
+#     self.assertRaises(
+#         errors.PluginError,
+#         self.directadmin_client.add_txt_record,
+#         self.record_name + '.' + DOMAIN, self.record_content, self.record_ttl)
+#
+# def test_del_txt_record(self):
+#     self.cf.zones.get.return_value = [{'id': self.zone_id}]
+#     self.cf.zones.dns_records.get.return_value = [{'id': self.record_id}]
+#
+#     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
+#
+#     expected = [mock.call.zones.get(params=mock.ANY),
+#                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY),
+#                 mock.call.zones.dns_records.delete(self.zone_id, self.record_id)]
+#
+#     self.assertEqual(expected, self.cf.mock_calls)
+#
+#     get_data = self.cf.zones.dns_records.get.call_args[1]['params']
+#
+#     self.assertEqual('TXT', get_data['type'])
+#     self.assertEqual(self.record_name, get_data['name'])
+#     self.assertEqual(self.record_content, get_data['content'])
+#
+# def test_del_txt_record_error_during_zone_lookup(self):
+#     self.cf.zones.get.side_effect = API_ERROR
+#
+#     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
+#
+# def test_del_txt_record_error_during_delete(self):
+#     self.cf.zones.get.return_value = [{'id': self.zone_id}]
+#     self.cf.zones.dns_records.get.return_value = [{'id': self.record_id}]
+#     self.cf.zones.dns_records.delete.side_effect = API_ERROR
+#
+#     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
+#     expected = [mock.call.zones.get(params=mock.ANY),
+#                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY),
+#                 mock.call.zones.dns_records.delete(self.zone_id, self.record_id)]
+#
+#     self.assertEqual(expected, self.cf.mock_calls)
+#
+# def test_del_txt_record_error_during_get(self):
+#     self.cf.zones.get.return_value = [{'id': self.zone_id}]
+#     self.cf.zones.dns_records.get.side_effect = API_ERROR
+#
+#     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
+#     expected = [mock.call.zones.get(params=mock.ANY),
+#                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY)]
+#
+#     self.assertEqual(expected, self.cf.mock_calls)
+#
+# def test_del_txt_record_no_record(self):
+#     self.cf.zones.get.return_value = [{'id': self.zone_id}]
+#     self.cf.zones.dns_records.get.return_value = []
+#
+#     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
+#     expected = [mock.call.zones.get(params=mock.ANY),
+#                 mock.call.zones.dns_records.get(self.zone_id, params=mock.ANY)]
+#
+#     self.assertEqual(expected, self.cf.mock_calls)
+#
+# def test_del_txt_record_no_zone(self):
+#     self.cf.zones.get.return_value = [{'id': None}]
+#
+#     self.cloudflare_client.del_txt_record(DOMAIN, self.record_name, self.record_content)
+#     expected = [mock.call.zones.get(params=mock.ANY)]
+#
+#     self.assertEqual(expected, self.cf.mock_calls)
 
 
 if __name__ == "__main__":
