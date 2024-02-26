@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 certbot = "^1.8.0"
+acme = "^1.32.0"
 
 [tool.poetry.group.dev.dependencies]
 certifi = "2024.2.2"
