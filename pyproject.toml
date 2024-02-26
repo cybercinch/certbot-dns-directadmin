@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "certbot_dns_directadmin"
+version = "1.0.5"
+description = "Certbot plugin.  Allows completing DNS01 challenge against a DirectAdmin Server"
+authors = ["guisea <hey@cybercinch.nz>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+certbot = "^1.8.0"
+
+[tool.poetry.group.dev.dependencies]
+certifi = "2024.2.2"
+mock = "5.1.0"
+coverage = "7.4.3"
+black = "^22.8.0"
+flake8 = "^5.0.4"
+sphinx_rtd_theme = "^2.0.0"
+python-semantic-release = "^7.32.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_variable = "pyproject.toml:version" # version location
+branch = "main"                             # branch to make releases of
+changelog_file = "CHANGELOG.md"             # changelog file
+build_command = "poetry build"              # build dists
+dist_path = "dist/"                         # where to put dists
+upload_to_release = true                    # auto-create GitHub release
+upload_to_pypi = false                      # don't auto-upload to PyPI
+remove_dist = false                         # don't remove dists
+patch_without_tag = true                    # patch release by default
