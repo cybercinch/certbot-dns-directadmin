@@ -2,7 +2,14 @@
 
 
 
-## v1.0.7 (2024-02-27)
+## v1.0.8 (2024-02-27)
+
+### Unknown
+
+* :robot: Updated project dependencies ([`7584d52`](https://github.com/cybercinch/certbot-dns-directadmin/commit/7584d524e1b25cf5b0a9d561a3580d2aa62a73c6))
+
+
+## v1.0.7 (2024-02-26)
 
 ### Unknown
 
