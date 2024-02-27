@@ -57,7 +57,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          poetry run semantic-release publish
+          poetry run semantic-release version
         ## Because inside the poetry venv?
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
@@ -65,3 +65,10 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_PASSWORD }}
           # repository_url: https://test.pypi.org/legacy/
+      - name: Upload to GH
+        env:
+          GH_TOKEN: ${{ secrets.github_token }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          poetry run semantic-release publish
