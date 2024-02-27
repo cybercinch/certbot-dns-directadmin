@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "certbot_dns_directadmin"
-version = "1.0.5"
+version = "1.0.6"
 description = "Certbot plugin.  Allows completing DNS01 challenge against a DirectAdmin Server"
 authors = ["guisea <hey@cybercinch.nz>"]
 readme = "README.md"
@@ -17,7 +17,7 @@ coverage = "7.4.3"
 black = "^22.8.0"
 flake8 = "^5.0.4"
 sphinx_rtd_theme = "^2.0.0"
-python-semantic-release = "^7.32.1"
+python-semantic-release = "^9.1.1"
 
 [build-system]
 requires = ["poetry-core"]
