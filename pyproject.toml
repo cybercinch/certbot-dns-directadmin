@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "certbot_dns_directadmin"
-version = "1.0.7"
+#version = "1.0.7"
 description = "Certbot plugin.  Allows completing DNS01 challenge against a DirectAdmin Server"
 authors = ["guisea <hey@cybercinch.nz>"]
 readme = "README.md"
