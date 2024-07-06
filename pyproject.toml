@@ -12,7 +12,7 @@ certbot = "^1.8.0"
 acme = "^1.32.0"
 
 [tool.poetry.group.dev.dependencies]
-certifi = "2024.2.2"
+certifi = "2024.7.4"
 mock = "5.1.0"
 coverage = "7.4.3"
 black = "^22.8.0"
