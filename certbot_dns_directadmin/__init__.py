@@ -32,6 +32,7 @@ the following permissions:
 * ``CMD_API_LOGIN_TEST``
 * ``CMD_API_DNS_CONTROL``
 * ``CMD_API_SHOW_DOMAINS``
+* ``CMD_API_DOMAIN_POINTER``
 
 DirectAdmin provides instructions for creating a login key - `here <https://help.directadmin.com/item.php?id=523>`_ 
 
