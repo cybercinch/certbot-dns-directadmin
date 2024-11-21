@@ -47,24 +47,43 @@ jobs:
 #          cache: "poetry"
       - name: Install dependencies
         run: pip install poetry && poetry install
-      - name: Prepare package for release
-        env:
-          GH_TOKEN: ${{ secrets.github_token }}
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          semantic-release version
-        ## Because inside the poetry venv?
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: python-semantic-release/python-semantic-release@v9.12.0
+        with:
+          root_options: "-vv --noop"
+      - name: Action | Semantic Version Release
+        id: release
+        # Adjust tag with desired version if applicable.
+        uses: python-semantic-release/python-semantic-release@v9.12.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git_committer_name: "github-actions"
+          git_committer_email: "actions@users.noreply.github.com"
+
+      - name: Publish | Upload package to PyPI
+        uses: pypa/gh-action-pypi-publish@v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_PASSWORD }}
-          # repository_url: https://test.pypi.org/legacy/
-      - name: Upload to GH
-        env:
-          GH_TOKEN: ${{ secrets.github_token }}
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          semantic-release publish
+        if: steps.release.outputs.released == 'true'
+
+#        ## Because inside the poetry venv?
+#      - name: Publish to PyPI
+#        uses: pypa/gh-action-pypi-publish@release/v1
+#        with:
+#          user: __token__
+#          password: ${{ secrets.PYPI_PASSWORD }}
+#          # repository_url: https://test.pypi.org/legacy/
+      - name: Publish | Upload to GitHub Release Assets
+        uses: python-semantic-release/publish-action@v9.8.9
+        if: steps.release.outputs.released == 'true'
+        with:
+          github_token: ${{ secrets.github_token }}
+          tag: ${{ steps.release.outputs.tag }}
+
+#      - name: Upload to GH
+#        env:
+#          GH_TOKEN: ${{ secrets.github_token }}
+#        run: |
+#          git config user.name github-actions
+#          git config user.email github-actions@github.com
+#          semantic-release publish
