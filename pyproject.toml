@@ -8,11 +8,11 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.9"
-certbot = "^1.8.0"
-acme = "^1.32.0"
+certbot = "^3.0.1"
+acme = ">=2.11.0"
 
 [tool.poetry.group.dev.dependencies]
-certifi = "2024.2.2"
+certifi = "^2024.8.30"
 mock = "5.1.0"
 coverage = "7.4.3"
 black = "^22.8.0"
@@ -78,3 +78,10 @@ env = "GH_TOKEN"
 dist_glob_patterns = ["dist/*"]
 upload_to_vcs_release = true
 
+[tool.coverage.run]
+omit = [
+    "certbot_dns_directadmin/directadmin.py",
+    "docs/*"
+]
+[tool.coverage.report]
+skip_empty = true
