@@ -1,0 +1,22 @@
+{
+  "plugins": {
+    "provider": {
+        "name": "github"
+    },
+    "changelog-generator": {
+        "name": "default",
+        "options": {
+          "emojis": "true"
+        }
+    },
+    "hooks": {
+      "names": [
+        "exec"
+      ],
+      "options": {
+        "exec_on_success": "./scripts/build.sh {{.NewRelease.Version}}",
+        "exec_on_no_release": "echo {{.Reason}}: {{.Message}}"
+      }
+    }
+  }
+}
