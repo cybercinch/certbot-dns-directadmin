@@ -58,7 +58,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Action | Check if no-release run
+        id: filecheck
+        run: |
+          if [ -f "no-release"]; then
+          echo "check_result=false" >> $GITHUB_OUTPUT
+          else
+          echo "check_result=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Publish | Upload package to PyPI
+        if: steps.filecheck.outputs.check_result == 'true'  # Only if this is not chore/ci/docs we do release
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
