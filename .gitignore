@@ -103,7 +103,8 @@ ENV/
 [Ll]ib
 [Ll]ib64
 [Ll]ocal
-[Ss]cripts
+[Ss]cripts/*
+![Ss]cripts/build.sh
 pyvenv.cfg
 .venv
 pip-selfcheck.json
