@@ -1,16 +1,14 @@
-"""Tests for certbot_dns_cloudflare._internal.dns_cloudflare."""
-
 import unittest
-from unittest import mock
 from contextlib import contextmanager
+from unittest import mock
 
-# import CloudFlare
-import certbot
 from certbot import errors
 from certbot.compat import os
 from certbot.plugins import dns_test_common
 from certbot.plugins.dns_test_common import DOMAIN
 from certbot.tests import util as test_util
+
+from certbot_dns_directadmin.dns_directadmin import Authenticator
 from certbot_dns_directadmin.directadmin import DirectAdminClientException
 
 API_ERROR = DirectAdminClientException('Test Client Exception')
@@ -22,7 +20,7 @@ API_PASSWORD = 'an-api-key'
 class AuthenticatorTest(test_util.TempDirTestCase, dns_test_common.BaseAuthenticatorTest):
 
     def setUp(self):
-        from certbot_dns_directadmin.dns_directadmin import Authenticator
+
         super().setUp()
 
         path = os.path.join(self.tempdir, 'file.ini')
