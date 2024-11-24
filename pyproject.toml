@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-certbot = "^3.0.1"
+certbot = ">=2.11.0"
 acme = ">=2.11.0"
 
 [tool.poetry.group.dev.dependencies]
