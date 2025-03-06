@@ -179,8 +179,8 @@ class _DirectadminClient:
             if record_name is domain or record_name.endswith("." + domain):
                 directadmin_zone = main_domain
                 directadmin_name = record_name[: -len(domain) - 1]
-            if main_domain != domain:
-                is_pointer = "yes"
+                if main_domain != domain:
+                    is_pointer = "yes"
                 break
         if directadmin_name is None:
             raise DirectAdminClientException(
