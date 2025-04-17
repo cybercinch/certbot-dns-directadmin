@@ -176,7 +176,7 @@ class _DirectadminClient:
         logger.debug("Domain List returned: " + json.dumps(domains))
         is_pointer = "no"
         for domain, main_domain in domains.items():
-            if record_name is domain or record_name.endswith("." + domain):
+            if record_name == domain or record_name.endswith("." + domain):
                 directadmin_zone = main_domain
                 directadmin_name = record_name[: -len(domain) - 1]
                 if main_domain != domain:
