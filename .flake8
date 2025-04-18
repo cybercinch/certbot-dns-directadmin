@@ -19,6 +19,7 @@ exclude =
     dist
     # Virtualenv should not be checked
     venv
+    .venv
 extend-exclude =
     # This is documentation so please ignore
     certbot_dns_directadmin/__init__.py
