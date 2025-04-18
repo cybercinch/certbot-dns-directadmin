@@ -1,6 +1,0 @@
-acme
-certbot
-certifi
-cryptography
-mock
-coverage
