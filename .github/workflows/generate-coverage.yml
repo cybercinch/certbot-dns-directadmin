@@ -35,7 +35,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add coverage.svg
-          git commit -m "Updated coverage.svg"
+          git commit -m "chore: Updated coverage.svg"
 
       - name: Push changes
         if: steps.changed_files.outputs.files_changed == 'true'
