@@ -49,7 +49,6 @@ jobs:
         run: |
           pip install poetry && \
           poetry install
-
       - name: Action | Semantic Version Release
         id: semrelease
         uses: go-semantic-release/action@v1
@@ -58,17 +57,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Action | Check if no-release run
+      - name: Action | Check if no-release file exists
         id: filecheck
         run: |
+          echo "=== Debugging file check ==="
+          echo "Current directory contents:"
+          ls -la
+          echo ""
+          echo "Checking for no-release file..."
           if [ -f "no-release" ]; then
-          echo "check_result=false" >> $GITHUB_OUTPUT
+            echo "✅ no-release file EXISTS - will SKIP PyPI publish"
+            echo "check_result=false" >> $GITHUB_OUTPUT
           else
-          echo "check_result=true" >> $GITHUB_OUTPUT
+            echo "❌ no-release file DOES NOT EXIST - will PROCEED with PyPI publish"
+            echo "check_result=true" >> $GITHUB_OUTPUT
           fi
-
+          echo ""
+          echo "GITHUB_OUTPUT contents:"
+          cat $GITHUB_OUTPUT
+          echo "=== End debugging ==="
+      
       - name: Publish | Upload package to PyPI
-        if: steps.filecheck.outputs.check_result == 'true'  # Only if this is not chore/ci/docs we do release
+        if: steps.filecheck.outputs.check_result == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
