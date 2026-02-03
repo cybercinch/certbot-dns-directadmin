@@ -17,7 +17,7 @@ certifi = "^2024.8.30"
 mock = "5.1.0"
 coverage = "7.4.3"
 black = ">=22.8,<25.0"
-flake8 = "^5.0.4"
+flake8 = ">=5.0.4,<8.0.0"
 sphinx_rtd_theme = "^2.0.0"
 python-semantic-release = "^9.1.1"
 
