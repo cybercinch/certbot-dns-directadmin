@@ -145,14 +145,14 @@ test = ["coverage", "mypy", "pip", "pylint", "pytest", "pytest-cov", "pytest-xdi
 
 [[package]]
 name = "certifi"
-version = "2024.12.14"
+version = "2026.1.4"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 groups = ["main", "dev"]
 files = [
-    {file = "certifi-2024.12.14-py3-none-any.whl", hash = "sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56"},
-    {file = "certifi-2024.12.14.tar.gz", hash = "sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db"},
+    {file = "certifi-2026.1.4-py3-none-any.whl", hash = "sha256:9943707519e4add1115f44c2bc244f782c0249876bf51b6599fee1ffbedd685c"},
+    {file = "certifi-2026.1.4.tar.gz", hash = "sha256:ac726dd470482006e014ad384921ed6438c457018f4b3d204aea4281258b2120"},
 ]
 
 [[package]]
@@ -1645,4 +1645,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">3.9.1,<3.12.0"
-content-hash = "4d7be587a3faf37d78b22192793c98c380bad4a8a745ff71fb7b1f9939a4def3"
+content-hash = "65ad4f4a4a7b6062315607e67092da1354df940827e877f4cfcf70f3c356947a"
