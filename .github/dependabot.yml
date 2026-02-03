@@ -9,3 +9,10 @@ updates:
     commit-message:
       prefix: "fix(deps)"
       include: "scope"
+    groups:
+      production-dependencies:
+        patterns:
+          - "*" # Groups all dependencies
+        update-types:
+          - "minor"
+          - "patch"
