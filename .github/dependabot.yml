@@ -1,0 +1,11 @@
+# .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    # Customizes the commit message
+    commit-message:
+      prefix: "fix(deps)"
+      include: "scope"
