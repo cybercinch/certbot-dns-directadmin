@@ -7,10 +7,16 @@ updates:
       interval: "weekly"
     # Customizes the commit message
     commit-message:
-      prefix: "fix(deps)"
+      prefix: "fix"
       include: "scope"
     groups:
       production-dependencies:
+        patterns:
+          - "*" # Groups all dependencies
+        update-types:
+          - "minor"
+          - "patch"
+      development-dependencies:
         patterns:
           - "*" # Groups all dependencies
         update-types:
