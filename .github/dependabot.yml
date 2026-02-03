@@ -16,7 +16,7 @@ updates:
         update-types:
           - "minor"
           - "patch"
-      development-dependencies:
+      dev-dependencies:
         patterns:
           - "*" # Groups all dependencies
         update-types:
