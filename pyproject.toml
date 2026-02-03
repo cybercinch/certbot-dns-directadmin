@@ -18,7 +18,7 @@ mock = "5.1.0"
 coverage = "7.4.3"
 black = ">=22.8,<26.0"
 flake8 = ">=5.0.4,<8.0.0"
-sphinx_rtd_theme = "^2.0.0"
+sphinx_rtd_theme = ">=2,<4"
 python-semantic-release = ">=9.1.1,<11.0.0"
 
 [build-system]
