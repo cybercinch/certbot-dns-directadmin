@@ -11,14 +11,6 @@ updates:
       include: "scope"
     groups:
       production-dependencies:
-        patterns:
-          - "*" # Groups all dependencies
-        update-types:
-          - "minor"
-          - "patch"
+        dependency-type: "production"
       dev-dependencies:
-        patterns:
-          - "*" # Groups all dependencies
-        update-types:
-          - "minor"
-          - "patch"
+        dependency-type: "development"
