@@ -112,35 +112,34 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "certbot"
-version = "3.0.1"
+version = "3.3.0"
 description = "ACME client"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "certbot-3.0.1-py3-none-any.whl", hash = "sha256:32447edd7f9d38d2b30699137c0986516ed01971b60667c72382c7f81ec104dd"},
-    {file = "certbot-3.0.1.tar.gz", hash = "sha256:4d573635840bbcc1124a2176e7188e69f6e3210f9ed94e20839547f07caee2b2"},
+    {file = "certbot-3.3.0-py3-none-any.whl", hash = "sha256:38c5cdf6e34f6a7976837a607d96151fa1ea4870f25c6cef74fd18702603d512"},
+    {file = "certbot-3.3.0.tar.gz", hash = "sha256:40482fde0dd36b08e811d847df40ed04b6a3da52979c55456384a96807801d07"},
 ]
 
 [package.dependencies]
-acme = ">=3.0.1"
+acme = ">=3.3.0"
 ConfigArgParse = ">=1.5.3"
 configobj = ">=5.0.6"
-cryptography = ">=3.2.1"
+cryptography = ">=43.0.0"
 distro = ">=1.0.1"
-importlib-metadata = {version = ">=4.6", markers = "python_version < \"3.10\""}
+importlib_metadata = {version = ">=4.6", markers = "python_version < \"3.10\""}
 josepy = ">=1.13.0,<2"
 parsedatetime = ">=2.4"
 pyrfc3339 = "*"
 pytz = ">=2019.3"
 pywin32 = {version = ">=300", markers = "sys_platform == \"win32\""}
-setuptools = ">=41.6.0"
 
 [package.extras]
-all = ["Sphinx (>=1.2)", "azure-devops", "coverage", "ipdb", "mypy", "pip", "poetry (>=1.2.0)", "poetry-plugin-export (>=1.1.0)", "pylint", "pytest", "pytest-cov", "pytest-xdist", "setuptools", "sphinx-rtd-theme", "tox", "twine", "types-httplib2", "types-pyOpenSSL", "types-pyRFC3339", "types-pytz", "types-pywin32", "types-requests", "types-setuptools", "wheel"]
-dev = ["azure-devops", "ipdb", "poetry (>=1.2.0)", "poetry-plugin-export (>=1.1.0)", "twine"]
-docs = ["Sphinx (>=1.2)", "sphinx-rtd-theme"]
-test = ["coverage", "mypy", "pip", "pylint", "pytest", "pytest-cov", "pytest-xdist", "setuptools", "tox", "types-httplib2", "types-pyOpenSSL", "types-pyRFC3339", "types-pytz", "types-pywin32", "types-requests", "types-setuptools", "wheel"]
+all = ["Sphinx (>=1.2)", "azure-devops", "coverage", "ipdb", "mypy", "pip", "poetry (>=1.2.0)", "poetry-plugin-export (>=1.9.0)", "pylint", "pytest", "pytest-cov", "pytest-xdist", "setuptools", "sphinx_rtd_theme", "tox", "twine", "types-httplib2", "types-pyRFC3339", "types-pytz", "types-pywin32", "types-requests", "types-setuptools", "wheel"]
+dev = ["azure-devops", "ipdb", "poetry (>=1.2.0)", "poetry-plugin-export (>=1.9.0)", "twine"]
+docs = ["Sphinx (>=1.2)", "sphinx_rtd_theme"]
+test = ["coverage", "mypy", "pip", "pylint", "pytest", "pytest-cov", "pytest-xdist", "setuptools", "tox", "types-httplib2", "types-pyRFC3339", "types-pytz", "types-pywin32", "types-requests", "types-setuptools", "wheel"]
 
 [[package]]
 name = "certifi"
@@ -1306,27 +1305,6 @@ typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.1
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
-
-[[package]]
-name = "setuptools"
-version = "78.1.1"
-description = "Easily download, build, install, upgrade, and uninstall Python packages"
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "setuptools-78.1.1-py3-none-any.whl", hash = "sha256:c3a9c4211ff4c309edb8b8c4f1cbfa7ae324c4ba9f91ff254e3d305b9fd54561"},
-    {file = "setuptools-78.1.1.tar.gz", hash = "sha256:fcc17fd9cd898242f6b4adfaca46137a9edef687f43e6f78469692a5e70d851d"},
-]
-
-[package.extras]
-check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1) ; sys_platform != \"cygwin\"", "ruff (>=0.8.0) ; sys_platform != \"cygwin\""]
-core = ["importlib_metadata (>=6) ; python_version < \"3.10\"", "jaraco.functools (>=4)", "jaraco.text (>=3.7)", "more_itertools", "more_itertools (>=8.8)", "packaging (>=24.2)", "platformdirs (>=4.2.2)", "tomli (>=2.0.1) ; python_version < \"3.11\"", "wheel (>=0.43.0)"]
-cover = ["pytest-cov"]
-doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier", "towncrier (<24.7)"]
-enabler = ["pytest-enabler (>=2.2)"]
-test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21) ; python_version >= \"3.9\" and sys_platform != \"cygwin\"", "jaraco.envs (>=2.2)", "jaraco.path (>=3.7.2)", "jaraco.test (>=5.5)", "packaging (>=24.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-home (>=0.5)", "pytest-perf ; sys_platform != \"cygwin\"", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel (>=0.44.0)"]
-type = ["importlib_metadata (>=7.0.2) ; python_version < \"3.10\"", "jaraco.develop (>=7.21) ; sys_platform != \"cygwin\"", "mypy (==1.14.*)", "pytest-mypy"]
 
 [[package]]
 name = "shellingham"
